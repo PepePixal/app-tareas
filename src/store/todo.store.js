@@ -112,9 +112,9 @@ const deleteTodo = ( todoId ) => {
 };
 
 const deleteCompleted = () => {
-    // genera un nuevo state.todos, filtrando y obteniendo cada todo,
-    // cuyo done sea true (hecho) 
-    state.todos = state.todos.filter( todo => todo.done );
+    // genera un nuevo state.todos con los todo no completados (done: false),
+    // filtrando y obteniendo cada todo, cuyo atributo done NO sea true
+    state.todos = state.todos.filter( todo => !todo.done );
 };
 
 // establece el filtro. Requiere el filtro o asigna All por defecto.

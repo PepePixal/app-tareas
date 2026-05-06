@@ -6,14 +6,16 @@ import todoStore from '../store/todo.store.js';
 import { renderTodos } from './use-cases/render-todos.js';
 
 
-// objeto con los elementos del html
+// objeto con los atributos de los elementos del html
 const ElementIDs = {
     // elemento html con class = todo-List
     TodoList: '.todo-list',
     // elemento html con id new-todo-input
     NewTodoInput: '#new-todo-input',
     // elemento html button class 'destroy'
-    DestroyTodo: '.destroy'
+    DestroyTodo: '.destroy',
+    // elemento boton Borrar Completados
+    ClearCompleted: '.clear-completed'
 }
 
 
@@ -59,6 +61,8 @@ export const App = ( elementId ) => {
     const todoListUL = document.querySelector( ElementIDs.TodoList );
     // selecciona el botón X del todo
     const destroyTodo = document.querySelector( ElementIDs.DestroyTodo );
+    // selecciona el botón Borrar Completados
+    const clearCompleted = document.querySelector( ElementIDs.ClearCompleted );
 
 
     //** Listeners
@@ -123,6 +127,18 @@ export const App = ( elementId ) => {
         
         // resetea y renderiza las tareas, segun sus estados.
         displayTodos();
+    });
+
+    // listener al botón Borrar Completados
+    clearCompleted.addEventListener( 'click', ( event ) => {
+        // llama metodo que borra todos los todos completados,
+        // los que tienen en su propiedad todo el valor de true
+        todoStore.deleteCompleted();
+
+        // resetea y renderiza las tareas, segun sus estados.
+        displayTodos();
+
+
     });
 
 
