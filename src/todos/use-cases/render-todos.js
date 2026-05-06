@@ -1,6 +1,9 @@
 import { Todo } from "../models/todo.model";
 import { createTodoHTML } from "./create-todo-html";
 
+// importar el objeto con los métodos, desde todo.store.js
+import todoStore from '../../store/todo.store';
+
 let element;
 
 /**
@@ -20,6 +23,10 @@ export const renderTodos = ( elementId, todos = [] ) => {
         
     // si element no tiene ningún valor (es false)
     if ( !element) throw new Error(`Element ${ elementId } not found`);
+
+    // llama al método que almacena todo el state en el localStorage web,
+    // antes de rederizar el state, cuando ha cambiado por algo.
+    todoStore.saveStateToLocalStorage();
     
     // purgar / vaciar el contenido html del element, antes de volver a llenarlo,
     // para que no se acumule la info repetida

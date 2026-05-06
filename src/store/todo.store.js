@@ -26,12 +26,41 @@ const state = {
 // funciones del store:
 
 const initStore = () => {
-    console.log(state);
+    // obtiene el valor del localStorage
+    loadStore();
     console.log('Store Initialiced');
 }
 
+// leer el valor de state almacenado en el localStorage
 const loadStore = () => {
-    throw new Error('loadStore Not implemented yet');
+    // .getItem('nom_key') obtiene el valor (tipo string)
+    // de la llave nom_key en el localStorage
+    
+    // valida si No hay valor en la llave state en el localStorage
+    if ( !localStorage.getItem('state') ) return;
+
+    // JSON.parse() convierte un JSON string, en un objeto y lo retorna.
+    // Como sabemos que el objeto 'state' consta de las propiedades todos y filter,
+    // hacemos la destructuración inicializada a [] y Filters.All por si no viene data
+    const { todos = [], filter = Filters.All } = JSON.parse( localStorage.getItem('state') ); 
+
+    // asigna los valores de las constantes destructuradas, a las propiedades del objeto state
+    state.todos  = todos;
+    state.filter = filter;
+};
+
+// almacenar en el LocalStorage Web
+const saveStateToLocalStorage = () => {
+    // Queremos almacenar el objeto state en el localStorage,
+    // pero el localStorage solo admite valor tipo string,
+    // tendremos que convertir el objeto state en string, para poder almacenarlo.
+
+    // JSON.stringify() es un método sobre el objeto global JSON, que
+    // convierte un valor JavaScript a un JavaScript Object Notation (JSON) string.
+
+    // método setItem() almacena key y valor en el localStorage,
+    // requiere key tipo string y valor tipo string
+    localStorage.setItem( 'state', JSON.stringify(state));
 };
 
 //obtener las tareas según el filtro seleccionado. Requiere filter (string)
@@ -111,5 +140,6 @@ export default {
     deleteTodo,
     deleteCompleted,
     setFilter,
-    getCurrentFilter
+    getCurrentFilter,
+    saveStateToLocalStorage
 };
