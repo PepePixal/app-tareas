@@ -52,11 +52,13 @@ export const App = ( elementId ) => {
 
     // selecciona el input
     const newDescriptionInput = document.querySelector( ElementIDs.NewTodoInput );
+    // selecciona el ul de la lista de todos
+    const todoListUL = document.querySelector( ElementIDs.TodoList );
 
 
     //** Listeners
 
-    // evento 'teclear' en el input
+    // listener al input de nueva tarea con evento 'teclear' en el input
     newDescriptionInput.addEventListener( 'keyup', ( event ) =>{
         // el keyCode del event contiene el codigo de la tecla, 13 es la tecla return.
         // Si la tecla pulsada no es 13, sale, pero sigue escuchando y aculando teclas pulsadas
@@ -80,6 +82,23 @@ export const App = ( elementId ) => {
         // resetea el valor del target.value del event
         event.target.value = '';
 
+    });
+
+    // listener a la lista de tareas, con evento 'click'
+    todoListUL.addEventListener( 'click', ( event ) => {
+        // El metodo .closest('[nom_atributo]') retorna el elemento padre más cercano,
+        // que tenga un atributo con el nombre indicado en nom_atributo.
+        // Obtiene el li con el data-id del todo (tarea).
+        const element = event.target.closest('[data-id]');
+
+        // console.log( element.getAttribute('data-id') );
+
+        // Llama func toogleTodo(), enviando el valor del atributo data-id (id único del todo),
+        // del elemento html almacenado en element. ( envia el id único del todo)
+        // toogleTodo() cambia el valor de la propiedad done del todo (tarea))
+        todoStore.toogleTodo( element.getAttribute('data-id') );
+        // resetea y renderiza las tareas, segun sus estados.
+        displayTodos();
     });
 
 

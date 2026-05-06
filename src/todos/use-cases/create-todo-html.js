@@ -1,7 +1,5 @@
 import { Todo } from "../models/todo.model";
 
-
-
 /**
  * Crea el <li> html para mostrar el todo (tarea)
  * @param {Todo} todo
