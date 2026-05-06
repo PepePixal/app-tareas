@@ -11,7 +11,9 @@ const ElementIDs = {
     // elemento html con class = todo-List
     TodoList: '.todo-list',
     // elemento html con id new-todo-input
-    NewTodoInput: '#new-todo-input'
+    NewTodoInput: '#new-todo-input',
+    // elemento html button class 'destroy'
+    DestroyTodo: '.destroy'
 }
 
 
@@ -45,6 +47,7 @@ export const App = ( elementId ) => {
 
         //llama la func displayTodos()
         displayTodos();
+
     })();
 
 
@@ -54,6 +57,8 @@ export const App = ( elementId ) => {
     const newDescriptionInput = document.querySelector( ElementIDs.NewTodoInput );
     // selecciona el ul de la lista de todos
     const todoListUL = document.querySelector( ElementIDs.TodoList );
+    // selecciona el botón X del todo
+    const destroyTodo = document.querySelector( ElementIDs.DestroyTodo );
 
 
     //** Listeners
@@ -97,6 +102,25 @@ export const App = ( elementId ) => {
         // del elemento html almacenado en element. ( envia el id único del todo)
         // toogleTodo() cambia el valor de la propiedad done del todo (tarea))
         todoStore.toogleTodo( element.getAttribute('data-id') );
+        // resetea y renderiza las tareas, segun sus estados.
+        displayTodos();
+    });
+
+    // listener al button class destroy
+    todoListUL.addEventListener( 'click', ( event ) => {
+        // console.log(event.target.className);
+
+        // si el valor del atributo class, del elemento que dispara el evento
+        // NO es igual a destroy (X botón class destroy), para y sal
+        if ( event.target.className !== 'destroy') return;
+
+        // como se está pulsando sobre el button con class 'destroy'
+
+        // Obtiene el li con el data-id del todo (tarea).
+        const element = event.target.closest('[data-id]');
+        // Llama metodo deleteTodo() enviando el id único del todo
+        todoStore.deleteTodo( element.getAttribute('data-id') );
+        
         // resetea y renderiza las tareas, segun sus estados.
         displayTodos();
     });
