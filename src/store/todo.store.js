@@ -104,6 +104,25 @@ const toogleTodo = ( todoId ) => {
     
 };
 
+/**
+ * marca o desmarca, todas la tareas como completadas
+ */
+const toggleAllTodos = () => {
+    // every() Determina si todos los elementos de una matriz (state.todos)
+    // cumplen la prueba especificada. Retorna true o false
+    // Aquí determina si todos los todo tienen en su atributo done: true,
+    // retornando true o false
+    const allDone = state.todos.every( (todo) => todo.done )
+    state.todos.forEach( (todo) => {
+        // a cada todo, en su propiedad done, 
+        // le asigna el estado contrario al obtenido en allDone
+        todo.done = !allDone;
+    });
+
+    saveStateToLocalStorage();
+};
+
+
 // requiere todoId (String)
 const deleteTodo = ( todoId ) => {
     // genera un nuevo state.todos, filtrando y obteniendo cada todo,
@@ -141,5 +160,6 @@ export default {
     deleteCompleted,
     setFilter,
     getCurrentFilter,
-    saveStateToLocalStorage
+    saveStateToLocalStorage,
+    toggleAllTodos
 };

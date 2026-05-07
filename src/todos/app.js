@@ -20,7 +20,9 @@ const ElementIDs = {
     // elementos botones de filtros
     TodoFilters: '.filtro',
     // elemento <strong>
-    PendingCountLabel: '#pending-count'
+    PendingCountLabel: '#pending-count',
+    // elemento label +
+    CompletedAllTodo: '.toggle-all + label'
 }
 
 
@@ -80,6 +82,8 @@ export const App = ( elementId ) => {
     const clearCompleted = document.querySelector( ElementIDs.ClearCompleted );
     // selecciona todos los botones de filtros
     const filtersLIs = document.querySelectorAll( ElementIDs.TodoFilters );
+    // selecciona icono + marcar todas las tareas
+    const completedAllSelect = document.querySelector( ElementIDs.CompletedAllTodo ); 
     
 
 
@@ -193,6 +197,15 @@ export const App = ( elementId ) => {
             displayTodos();
         });
 
+    });
+
+    // listener al icono + marcar todos como completed
+    completedAllSelect.addEventListener( 'click', ( event ) => {
+        //llama func que marca/desmarca todas las tareas 
+        todoStore.toggleAllTodos();
+
+        // llama func, que obtiene los todos segun el filter y los renderiza
+        displayTodos();
     });
 
 }
