@@ -1,7 +1,7 @@
 // vite nos permite importar el html desde app.html con ?raw 
 import html from './app.html?raw';
-// importar el objeto con los métodos, desde todo.store.js
-import todoStore from '../store/todo.store.js';
+// importar el objeto con los métodos y la const Filters, desde todo.store.js
+import todoStore, { Filters } from '../store/todo.store.js';
 // importa func rederTodos()
 import { renderTodos } from './use-cases/render-todos.js';
 
@@ -14,8 +14,10 @@ const ElementIDs = {
     NewTodoInput: '#new-todo-input',
     // elemento html button class 'destroy'
     DestroyTodo: '.destroy',
-    // elemento boton Borrar Completados
-    ClearCompleted: '.clear-completed'
+    // elemento botón Borrar Completados
+    ClearCompleted: '.clear-completed',
+    // elementos botones de filtros
+    TodoFilters: '.filtro'
 }
 
 
@@ -25,13 +27,13 @@ const ElementIDs = {
  */
 export const App = ( elementId ) => {
 
-    // func obtiene todos y los rederiza en el html
+    // func obtiene todos, según el valor de Filter y los rederiza en el html
     const displayTodos = () => {
-        // obtener todos los todos (tareas)
-        // llama metodo getTodos() enviando como argumento filter,
+        // obtener todos los todos (tareas), según el valor de Filter
+        // llamando al metodo getTodos() y enviando como argumento filter,
         // lo que obtiene el método getCurrentFilter()
         const todos = todoStore.getTodos( todoStore.getCurrentFilter() );
-        // llama funcion para rederizar los todos
+        // llama funcion para rederizar los todos,
         // enviando en elemento html donde renderizar y el array de todos (tareas)
         renderTodos( ElementIDs.TodoList, todos);
     };
@@ -47,7 +49,7 @@ export const App = ( elementId ) => {
         // le agrega el div (con el h1) guardado en la var app
         document.querySelector(elementId).append( app );
 
-        //llama la func displayTodos()
+        // llama func, que obtiene los todos segun el filter y los renderiza
         displayTodos();
 
     })();
@@ -63,6 +65,8 @@ export const App = ( elementId ) => {
     const destroyTodo = document.querySelector( ElementIDs.DestroyTodo );
     // selecciona el botón Borrar Completados
     const clearCompleted = document.querySelector( ElementIDs.ClearCompleted );
+    // selecciona todos los botones de filtros
+    const filtersLIs = document.querySelectorAll( ElementIDs.TodoFilters );
 
 
     //** Listeners
@@ -85,7 +89,7 @@ export const App = ( elementId ) => {
         // para que agregue el nuevo todo a los todos (tareas)
         todoStore.addTodo( event.target.value );
 
-        // llama func que obtiene todos los todos y los renderiza
+        // llama func, que obtiene los todos segun el filter y los renderiza
         displayTodos();
 
         // resetea el valor del target.value del event
@@ -106,7 +110,8 @@ export const App = ( elementId ) => {
         // del elemento html almacenado en element. ( envia el id único del todo)
         // toogleTodo() cambia el valor de la propiedad done del todo (tarea))
         todoStore.toogleTodo( element.getAttribute('data-id') );
-        // resetea y renderiza las tareas, segun sus estados.
+
+        // llama func, que obtiene los todos segun el filter y los renderiza
         displayTodos();
     });
 
@@ -125,7 +130,7 @@ export const App = ( elementId ) => {
         // Llama metodo deleteTodo() enviando el id único del todo
         todoStore.deleteTodo( element.getAttribute('data-id') );
         
-        // resetea y renderiza las tareas, segun sus estados.
+        // llama func, que obtiene los todos segun el filter y los renderiza
         displayTodos();
     });
 
@@ -135,11 +140,45 @@ export const App = ( elementId ) => {
         // los que tienen en su propiedad todo el valor de true
         todoStore.deleteCompleted();
 
-        // resetea y renderiza las tareas, segun sus estados.
+        // llama func, que obtiene los todos segun el filter y los renderiza
         displayTodos();
-
-
     });
 
+    // filtersUL es una lista de elementos htlm (de .querySelectorAll()),
+    // los listeners se tienen que aplicar a cada uno de sus elementos
+    filtersLIs.forEach( element => {
+        // agrega un listener a cada element <a> (anchor)
+        element.addEventListener( 'click', ( event ) =>{
+            event.preventDefault();
+
+            // por cada click en cada enlace <a> :
+            // - itera todos los enalces <a> y les elimina la class 'selected'
+            filtersLIs.forEach( el => el.classList.remove('selected'));
+            // - agrega la class 'selected' al enlace <a> clicado
+            event.target.classList.add('selected');
+
+            //console.log(event.currentTarget.getAttribute('href'));
+
+            // obtiene el valor del atributo href de cada elemento <a> y lo compara
+            switch( event.currentTarget.getAttribute('href') ){
+                case '#/':
+                    // asigna filtro 'All', con la función setFilter()
+                    todoStore.setFilter(  Filters.All );
+                break;
+                case '#/active':
+                    // asigna filtro 'Pending', con la función setFilter()
+                    todoStore.setFilter(  Filters.Pending );
+                break;
+                case '#/completed':
+                    // asigna filtro 'Completed', con la función setFilter()
+                    todoStore.setFilter(  Filters.Completed );
+                break;
+            }
+            
+            // llama func, que obtiene los todos segun el filter y los renderiza
+            displayTodos();
+        });
+
+    });
 
 }

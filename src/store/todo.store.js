@@ -4,7 +4,7 @@
 import { Todo } from '../todos/models/todo.model.js';
 
 //objeto con las opciones de filtrado de tareas
-const Filters = {
+export const Filters = {
     All: 'All',
     Completed: 'Completed',
     Pending: 'Pending'
