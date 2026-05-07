@@ -4,6 +4,7 @@ import html from './app.html?raw';
 import todoStore, { Filters } from '../store/todo.store.js';
 // importa func rederTodos()
 import { renderTodos } from './use-cases/render-todos.js';
+import { renderPending } from './use-cases/render-pending.js';
 
 
 // objeto con los atributos de los elementos del html
@@ -17,7 +18,9 @@ const ElementIDs = {
     // elemento botón Borrar Completados
     ClearCompleted: '.clear-completed',
     // elementos botones de filtros
-    TodoFilters: '.filtro'
+    TodoFilters: '.filtro',
+    // elemento <strong>
+    PendingCountLabel: '#pending-count'
 }
 
 
@@ -36,6 +39,16 @@ export const App = ( elementId ) => {
         // llama funcion para rederizar los todos,
         // enviando en elemento html donde renderizar y el array de todos (tareas)
         renderTodos( ElementIDs.TodoList, todos);
+
+        // llama func
+        updatePendingCount();
+    };
+
+    // func 
+    const updatePendingCount = () => {
+        // llama func q obtinene los todos (tareas) pendings y las renderiza
+        // en el elemento html que se envía como argumento
+        renderPending( ElementIDs.PendingCountLabel );
     };
 
 
@@ -67,6 +80,7 @@ export const App = ( elementId ) => {
     const clearCompleted = document.querySelector( ElementIDs.ClearCompleted );
     // selecciona todos los botones de filtros
     const filtersLIs = document.querySelectorAll( ElementIDs.TodoFilters );
+    
 
 
     //** Listeners
